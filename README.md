@@ -131,7 +131,12 @@ autorestart=true
 redirect_stderr=true
 ```
 
++ crontab
 
+在OS的crontab中增加如下配置：
 
-
-+ 安装包
+```
+30 02 * * * /usr/bin/supervisorctl restart LemonHouseSpider
+30 03 * * * mysql < /usr/app/house/task/companystat.sql
+00 04 * * * mysql < /usr/app/house/task/datastat.sql
+```
