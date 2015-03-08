@@ -16,7 +16,21 @@
 
 ## 安装步骤
 
-下文以安装在/usr/app/house目录为例
+下文以安装在/usr/app/house目录为例.
+
+下载代码到/usr/app/house目录下，形成如下目录结构：
+
+```
+[root@cheyo house]# pwd
+/usr/app/house
+[root@cheyo house]# l
+total 16
+drwxr-xr-x 7 root root 4096 Mar  8 21:35 DjangoHome
+drwxr-xr-x 5 root root 4096 Mar  8 21:34 ENV
+drwxr-xr-x 3 root root 4096 Mar  8 21:35 spider
+drwxr-xr-x 2 root root 4096 Mar  8 21:35 task
+[root@cheyo house]#
+```
 
 + 创建Python虚拟环境
 
@@ -58,7 +72,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ```bash
 pip install beautifulsoup4
-pip install html5lib                 # this is for beautifulsoup4
+pip install lxml
 pip install django-pagination
 pip install MySQL-python
 ```
@@ -81,22 +95,43 @@ python manage.py syncdb
 conn = MySQLdb.connect(host="localhost", user='root', passwd='abcabc', db='LemonHouse2', charset='utf8')
 ```
 
+##运行
 
++ 启动数据采集
 
-+ 下载工程代码
-
-形成如下目录结构：
-
+```bash
+/usr/app/house/ENV/bin/python /usr/app/house/spider/LemonHouseSpider.py
 ```
-[root@cheyo house]# pwd
-/usr/app/house
-[root@cheyo house]# l
-total 16
-drwxr-xr-x 7 root root 4096 Mar  8 21:35 DjangoHome
-drwxr-xr-x 5 root root 4096 Mar  8 21:34 ENV
-drwxr-xr-x 3 root root 4096 Mar  8 21:35 spider
-drwxr-xr-x 2 root root 4096 Mar  8 21:35 task
-[root@cheyo house]#
+
++ 启动网站
+
+```bash
+cd /opt/app/house/DjangoHome
+/opt/app/house/ENV/bin/python manage.py runserver 0.0.0.0:8080
 ```
+
++ supervisor进程管理
+
+如果采用supervisor进行进程管理,可以参考如下配置：
+
+```ini
+[program:LemonHouse]
+directory=/usr/app/house/DjangoHome
+command=/usr/app/house/ENV/bin/python manage.py runserver 0.0.0.0:8080 --noreload
+stdout_logfile=/usr/app/house/DjangoHome/log/DjangoSupervisorRun.log
+numprocs=1
+redirect_stderr=true
+
+[program:LemonHouseSpider]
+directory=/usr/app/house/spider
+command=/usr/app/house/spider/LemonHouseSpider.py
+stdout_logfile=/usr/app/house/spider/log/LemonHouseSpiderSupervisorRun.log
+autostart=true
+autorestart=true
+redirect_stderr=true
+```
+
+
+
 
 + 安装包
