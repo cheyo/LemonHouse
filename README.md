@@ -26,6 +26,21 @@ cd /usr/app/house
 virtualenv ENV
 ```
 
++ 安装Django
+
+Django指定使用1.6版本,更高的版本需要Python 2.7因此使用Django1.6版本。
+
+```bash
+source ENV/bin/activate
+pip install -v django==1.6
+```
+
+测试是否安装成功：
+
+```
+
+```
+
 + 安装BeautifulSoup
 
   pip install beautifulsoup4
