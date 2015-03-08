@@ -50,6 +50,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
 
++ 配置MySQL
+
+为LemonHouse创建一个数据库。LemonHouse使用了事务，要求MySQL使用InnoDB作为存储引擎。
+
 + 安装相关Python库
 
 ```bash
@@ -57,8 +61,7 @@ pip install beautifulsoup4
 pip install html5lib                 # this is for beautifulsoup4
 pip install django-pagination
 pip install MySQL-python
-
-```python
+```
 
 + 配置Django
 
