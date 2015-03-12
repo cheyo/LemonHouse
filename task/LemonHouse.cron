@@ -1,0 +1,3 @@
+30 02 * * * /usr/bin/supervisorctl restart LemonHouseSpider 
+30 03 * * * mysql < /opt/app/house/task/companystat.sql
+00 04 * * * mysql < /opt/app/house/task/datastat.sql

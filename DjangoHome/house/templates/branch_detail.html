@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>{{ site_name }}</title>
+
+    {% include 'inc_html/header_inc.html' %}
+  </head>
+
+  <body>
+    
+    {% include 'inc_html/navbar_inc.html' %}
+
+    <div class="container">
+        <span style="vertical-align:middle; text-align:center;"><H3>{{ dict_project_info.project_name }}</H3><span></p>
+
+      {% for summary in branch_summary_list %}
+        <table class="table table-bordered table-striped table-condensed">
+          <thead>
+              <tr bgcolor="#0055CC" style="color:white">
+                <th style="vertical-align:middle; text-align:center;">类型:</th>
+                <th style="vertical-align:middle; text-align:center;">{{ summary.type }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>类型: </td>
+                <td>{{ summary.type }}</td>
+              </tr>
+              <tr>
+                <td>面积: </td>
+                <td>{{ summary.min_size }} ~ {{ summary.max_size }}平方米</td>
+              </tr>
+              <tr>
+                <td>单价: </td>
+                <td>{{ summary.min_price }} ~ {{ summary.max_price }}元/平方米<P/>
+                    均价: {{ summary.avg_price }}元/平方米
+                    基于: [{{ summary.sample_count }}/{{ summary.total_count }}] 评估
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        <P/>
+      {% endfor %}
+     </div>
+
+    <div class="container">
+        <span style="vertical-align:middle; text-align:center;"><H3>{{ dict_project_info.project_name }}</H3><span></p>
+
+        <table class="table table-bordered table-striped table-condensed">
+          <thead>
+              <tr bgcolor="#0055CC" style="color:white">
+                <th style="vertical-align:middle; text-align:center;">楼层</th>
+                <th style="vertical-align:middle; text-align:center;">房号</th>
+                <th style="vertical-align:middle; text-align:center;">类型</th>
+                <th style="vertical-align:middle; text-align:center;">面积1</th>
+                <th style="vertical-align:middle; text-align:center;">面积2</th>
+                <th style="vertical-align:middle; text-align:center;">面积3</th>
+                <th style="vertical-align:middle; text-align:center;">单价</th>
+                <th style="vertical-align:middle; text-align:center;">状态</th>
+                <th style="vertical-align:middle; text-align:center;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% if house_list %}
+              {% for house in house_list %}
+              <tr>
+                <td>{{ house.floor }}</td>
+                <td><i class="icon-home"></i>{{ house.name }}</td>
+                <td>{{ house.type }}</td>
+                <td>{{ house.size1|floatformat }}</td>
+                <td>{{ house.size2|floatformat }}</td>
+                <td>{{ house.size3|floatformat }}</td>
+                <td>{{ house.price|floatformat|default:"未知" }}</td>
+                <td>
+                    {% if 1 == house.status %}
+                      <span class="label label-success">
+                    {% elif 2 == house.status %}
+                      <span class="label label-info">
+                    {% elif 3 == house.status %}
+                      <span class="label label-warning">
+                    {% elif 4 == house.status %}
+                      <span class="label label-info">
+                    {% elif 5 == house.status %}
+                      <span class="label label-default">
+                    {% elif 6 == house.status %}
+                      <span class="label label-important">
+                    {% else %}
+                      <span class="label label-danger">
+                    {% endif %}
+                    {{ house.get_status_display }}</span></td>
+                <td><a href="http://ris.szpl.gov.cn/bol/housedetail.aspx?id={{ house.id }}" target="_blank" class="btn btn-mini btn-info">官网</a></td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                 <td>no data</td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+     </div>
+     
+    {% include 'inc_html/footer_inc.html' %}
+  </body>
+</html>

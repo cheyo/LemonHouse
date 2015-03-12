@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>{{ site_name }}</title>
+
+    {% include 'inc_html/header_inc.html' %}
+    <script type="text/javascript" src="{{ STATIC_URL }}fusioncharts/js/fusioncharts.js"></script><!--引入主类库-->
+
+  </head>
+
+  <body>
+
+    {% include 'inc_html/navbar_inc.html' %}
+
+    <div class="container">
+        <ul class="breadcrumb">
+          <li><a href="{% url 'site_index' %}">首页</a> <span class="divider">/</span></li>
+          <li><a href="{% url 'datastat_trend' %}">数据统计</a> <span class="divider">/</span></li>
+          <li class="active">新房供应趋势</li>
+        </ul>
+    </div>
+
+    <div class="container tabbable">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab" OnClick="show_chart_live()">按新增【住宅】房产统计</a></li>
+        <li><a href="#tab2" data-toggle="tab" OnClick="show_chart_all()">按新增【所有】房产统计</a></li>
+      </ul>
+      <div class="tab-content" style="vertical-align:middle; text-align:center;">
+        <div class="tab-pane active" id="tab1">
+          <div id="chart_live_count"  class="container">图形加载中...</div>
+          <div id="chart_live_size"  class="container">图形加载中...</div>
+        </div>
+        <div class="tab-pane" id="tab2">
+          <div id="chart_all_count"  class="container">图形加载中...</div>
+          <div id="chart_all_size"  class="container">图形加载中...</div>
+        </div>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+      //var json= '{"chart": {"yaxisname": "Sales Figure","caption": "Top 5 Sales Person","numberprefix": "$","useroundedges": "1","bgcolor": "FFFFFF,FFFFFF","showborder": "0"},"data": [{"label": "Alex","value": "25000"},{"label": "Mark","value": "35000"},{"label": "David","value": "42300"},{"label": "Graham","value": "35300"},{"label": "John","value": "31300"}]}'; 
+
+      var chart_live_count;
+      var chart_live_size;
+      var chart_all_count;
+      var chart_all_size;
+
+      function show_chart_live()
+      {
+        if (typeof chart_live_count == "undefined")
+        {
+          chart_live_count = new FusionCharts("Column2D.swf", "ChartId1", "800", "400", "0", "0");
+          chart_live_count.setDataURL("{% url 'trend_xml_live_count' %}");
+          //创建一个FusionCharts对象，第一个参数为swf文件的路径，第二个为id用来标识这个对象，第三个为宽度，第四个为高度
+          //chart.setDataURL("data/data.xml");//xml文件
+        }
+
+        if (!chart_live_count.hasRendered())
+        {
+          chart_live_count.render("chart_live_count");//将FusionCharts对象填充到指定的div标签处：render（div）
+        };
+
+
+        if (typeof chart_live_size == "undefined")
+        {
+          chart_live_size = new FusionCharts("Column2D.swf", "ChartId2", "800", "400", "0", "0");
+          chart_live_size.setDataURL("{% url 'trend_xml_live_size' %}");
+          //chart.setDataXML(xmldata);
+          //chart.setJSONData(json);
+        }
+
+        if (!chart_live_size.hasRendered())
+        {
+          chart_live_size.render("chart_live_size");//将FusionCharts对象填充到指定的div标签处：render（div）
+        }
+      }
+
+      function show_chart_all()
+      {
+
+        if (typeof chart_all_count == "undefined")
+        {
+          chart_all_count = new FusionCharts("Column2D.swf", "ChartId3", "800", "400", "0", "0");
+          chart_all_count.setDataURL("{% url 'trend_xml_all_count' %}");
+        }
+
+        if (!chart_all_count.hasRendered())
+        {
+          chart_all_count.render("chart_all_count");
+        }
+
+
+        if (typeof chart_all_size == "undefined")
+        {
+          chart_all_size = new FusionCharts("Column2D.swf", "ChartId4", "800", "400", "0", "0");
+          chart_all_size.setDataURL("{% url 'trend_xml_all_size' %}");
+        }
+
+        if (!chart_all_size.hasRendered())
+        {
+          chart_all_size.render("chart_all_size"); 
+        }
+      }
+
+      //页面加载时,首先画此图形.
+      show_chart_live();
+
+    </script>
+  
+  {% include 'inc_html/footer_inc.html' %}
+
+  </body>
+</html>

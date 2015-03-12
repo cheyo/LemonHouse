@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>柠檬House - {{ dict_project_info.project_name }}</title>
+
+    <!-- Bootstrap -->
+    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">首页</a>
+            <div class="nav-collapse">
+              <ul class="nav">
+                <li><a href="/project"><i class="icon-home"></i>楼盘数据</a></li>
+                <li class="divider-vertical"></li>
+                <li><a href="#"><i class="icon-leaf"></i>订阅新房通知</a></li>
+                <li class="divider-vertical"></li>
+              </ul>
+              
+              <ul class="nav pull-right">
+                <li><span class="navbar-text"><i class="icon-user"></i>cheyo</span></li>
+                <li class="divider-vertical"></li>
+                <li><span class="navbar-text">更新日期:&nbsp; </span></li>
+                <li><span class="navbar-text">2014-10-31</span></li>
+              </ul>
+            </div><!-- /.nav-collapse -->
+          </div>
+        </div><!-- /navbar-inner -->
+    </div><!-- /navbar -->
+    
+<form class="">
+    <fieldset>
+    
+    <div class="container">
+        
+        <span style="vertical-align:middle; text-align:center;"><H3>{{ dict_project_info.project_name }}</H3><span></p>
+
+        <div class="row" style="padding-top:5px">
+          <div class="span6 text-right">楼盘名称:</div>
+          <div class="span6 text-left">{{ dict_project_info.project_name }}</div>
+        </div>
+        <div class="row" style="padding-top:5px">
+          <div class="span6 text-right">总套数:</div>
+          <div class="span6 text-left">{{ dict_project_info.house_count }}套</div>
+        </div>
+        <div class="row" style="padding-top:5px">
+          <div class="span6 text-right">单套面积:</div>
+          <div class="span6 text-left">{{ dict_project_info.min_size|floatformat }} ~ {{ dict_project_info.max_size|floatformat }} 平方米</div>
+        </div>
+        <div class="row" style="padding-top:5px">
+          <div class="span6 text-right">单价范围:</div>
+          <div class="span6 text-left">{{ dict_project_info.min_price|floatformat }} ~ {{ dict_project_info.max_price|floatformat }} 元/平方米</div>
+        </div>
+        <div class="row" style="padding-top:5px;padding-bottom:15px">
+          <div class="span6 text-right">均价:</div>
+          <div class="span6 text-left">{{ dict_project_info.average_price|floatformat:0|default:"未知" }} 元/平方米</div>
+        </div>
+        
+        <table class="table table-bordered table-striped table-condensed">
+          <thead>
+              <tr bgcolor="#0055CC" style="color:white">
+                <th style="vertical-align:middle; text-align:center;">楼名</th>
+                <th style="vertical-align:middle; text-align:center;">座号</th>
+                <th style="vertical-align:middle; text-align:center;">楼层</th>
+                <th style="vertical-align:middle; text-align:center;">房号</th>
+                <th style="vertical-align:middle; text-align:center;">面积1</th>
+                <th style="vertical-align:middle; text-align:center;">面积2</th>
+                <th style="vertical-align:middle; text-align:center;">面积3</th>
+                <th style="vertical-align:middle; text-align:center;">单价</th>
+                <th style="vertical-align:middle; text-align:center;">状态</th>
+                <th style="vertical-align:middle; text-align:center;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% if house_list %}
+              {% for house in house_list %}
+              <tr>
+                <td>{{ house.branch.building.name }}</td>
+                <td>{{ house.branch.name }}</td>
+                <td>{{ house.floor }}</td>
+                <td>{{ house.name }}</td>
+                <td>{{ house.size1|floatformat }}</td>
+                <td>{{ house.size2|floatformat }}</td>
+                <td>{{ house.size3|floatformat }}</td>
+                <td>{{ house.price|floatformat|default:"未知" }}</td>
+                <td>
+                    {% if 1 == house.status %}
+                      <span class="label label-success">
+                    {% elif 2 == house.status %}
+                      <span class="label label-info">
+                    {% elif 3 == house.status %}
+                      <span class="label label-warning">
+                    {% elif 4 == house.status %}
+                      <span class="label label-info">
+                    {% elif 5 == house.status %}
+                      <span class="label label-default">
+                    {% elif 6 == house.status %}
+                      <span class="label label-important">
+                    {% else %}
+                      <span class="label label-danger">
+                    {% endif %}
+                    {{ house.get_status_display }}</span></td>
+                <td><a href="http://ris.szpl.gov.cn/bol/housedetail.aspx?id={{ house.id }}" target="_blank" class="btn btn-mini btn-info">官网</a></td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                 <td>no data</td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+     </div>
+     
+     <div class="container" style="text-align: right">
+        <input class="btn btn-primary" type="button" value="test"/>
+     </div>
+   
+    </fieldset>
+</form> 
+  </body>
+</html>

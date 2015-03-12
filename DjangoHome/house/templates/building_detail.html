@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>{{ site_name }}</title>
+
+    {% include 'inc_html/header_inc.html' %}
+
+  </head>
+
+  <body>
+
+    {% include 'inc_html/navbar_inc.html' %}
+
+    <div class="container">
+        <ul class="breadcrumb">
+          <li><a href="/">首页</a> <span class="divider">/</span></li>
+          <li><a href="/house">楼盘</a> <span class="divider">/</span></li>
+          <li><a href="/house/{{ project.id }}">{{ project.name }}</a> <span class="divider">/</span></li>
+          <li class="active">{{ building_name }}</li>
+        </ul>
+    </div>
+
+
+    <div class="container tabbable"> <!-- Only required for left/right tabs -->
+      <ul class="nav nav-tabs">
+        {% for branch_name in dict_house_list.iterkeys %}
+          {% if forloop.first %}
+          <li class="active">
+          {% else %} 
+          <li>
+          {% endif %}
+
+          <a href="#tab{{ forloop.counter }}" data-toggle="tab">{{ branch_name }}</a></li>
+        {% endfor %}
+      </ul>
+      <div class="tab-content">
+        {% for branch_name, house_list in dict_house_list.iteritems %}
+        
+        {% if forloop.first %}
+        <div class="tab-pane active" id="tab{{ forloop.counter }}">
+        {% else %} 
+        <div class="tab-pane" id="tab{{ forloop.counter }}">
+        {% endif %}
+
+          <table class="table table-bordered table-striped table-condensed">
+          <thead>
+              <tr bgcolor="#0055CC" style="color:white" class="center">
+                <th>楼层</th>
+                <th>房号</th>
+                <th>类型</th>
+                <th>建筑面积</th>
+                <th>户内面积</th>
+                <th>分摊面积</th>
+                <th>单价</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% if house_list %}
+              {% for house in house_list %}
+              <tr class="center">
+                <td>{{ house.floor }}</td>
+                <td><i class="icon-home"></i>{{ house.name }}</td>
+                <td>{{ house.type }}</td>
+                <td>{{ house.size1|floatformat }}</td>
+                <td>{{ house.size2|floatformat }}</td>
+                <td>{{ house.size3|floatformat }}</td>
+                <td>{{ house.price|floatformat|default:"未知" }}</td>
+                <td>
+                    {% if 1 == house.status %}
+                      <span class="label label-success">
+                    {% elif 2 == house.status %}
+                      <span class="label label-info">
+                    {% elif 3 == house.status %}
+                      <span class="label label-warning">
+                    {% elif 4 == house.status %}
+                      <span class="label label-info">
+                    {% elif 5 == house.status %}
+                      <span class="label label-default">
+                    {% elif 6 == house.status %}
+                      <span class="label label-important">
+                    {% else %}
+                      <span class="label label-danger">
+                    {% endif %}
+                    {{ house.get_status_display }}</span></td>
+                <td><a href="http://ris.szpl.gov.cn/bol/housedetail.aspx?id={{ house.id }}" target="_blank" class="btn btn-mini btn-info">官网</a></td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr style="vertical-align:middle; text-align:center;">
+                 <td>no data</td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+    {% include 'inc_html/footer_inc.html' %}
+  </body>
+</html>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chart caption='过去一年每月新增商品房总面积数-全部房产' yaxisname='每月新增商品房面积-全部房产' useroundedges='1' bgcolor='FFFFFF,FFFFFF' showBorder='0'>
+{% if trend_data %}
+  {% for trend_stat in trend_data %}
+    <set label='{{ trend_stat.month }}' value='{{ trend_stat.TotalSize }}' />
+  {% endfor %}
+{% endif %}
+</chart>
+  
+  

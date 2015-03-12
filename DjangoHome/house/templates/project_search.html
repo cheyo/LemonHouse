@@ -1,0 +1,88 @@
+ {% load pagination_tags %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>{{ site_name }}</title>
+
+    {% include 'inc_html/header_inc.html' %}
+
+  </head>
+
+  <body>
+
+    {% include 'inc_html/navbar_inc.html' %}
+
+    <div class="container">
+        <ul class="breadcrumb">
+          <li><a href="/">首页</a> <span class="divider">/</span></li>
+          <li><a href="{% url 'project_index' %}">楼盘</a> <span class="divider">/</span></li>
+          <li class="active">搜索楼盘</li>
+        </ul>
+    </div>
+   
+    <div class="container" style="margin-bottom: 15px;">
+      <div class="span2" style="vertical-align:middle; text-align:right; margin: 4px 0 0 30px; font-size: 16px">
+        <i class="icon-search"></i>搜索结果:
+      </div>
+      <div class="span7" style="vertical-align:middle; text-align:center;">
+        <form class="form-search" action="{% url 'project_search' %}" method="post" style="margin: 0 0 0px;">
+          <div class="input-append">
+            {% csrf_token %}
+            {{ form.keyword }}
+            <button type="submit" class="btn btn-info"> 搜索 </button>
+          </div>
+        </form>
+        {% if is_show_result %}
+          {% for error in form.keyword.errors %}
+              <li class="text-error"><strong>{{ error|escape }}</strong></li>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <div class="span2" style="vertical-align:middle; text-align:center; margin: 4px 0 0px;"><i class="icon-th-list"></i> 
+        <a href="{% url 'project_index' %}"> 浏览全部楼盘</a>
+      </div>
+    </div>
+
+  {% if is_show_result %}
+    <div class="container">
+      <table class="table table-bordered table-striped table-condensed">
+        <thead>
+          <tr bgcolor="#0055CC" style="color:white">
+            <th style="vertical-align:middle; text-align:center;">序号</th>
+            <th style="vertical-align:middle; text-align:center;">项目名称</th>
+            <th style="vertical-align:middle; text-align:center;">开发企业</th>
+            <th style="vertical-align:middle; text-align:center;">区域</th>
+            <th style="vertical-align:middle; text-align:center;">上网时期</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% autopaginate project_list 30 %}
+        {% if project_list %}
+          {% for project in project_list %}
+          <tr>
+            <!-- <td>{{ forloop.counter }}</td> -->
+            <td style="vertical-align:middle; text-align:center;">{{ page_obj.start_index | add:forloop.counter | add:"-1" }}</td>
+            <td><a href="/house/{{ project.id }}">{{ project.name }}</a></td>
+            <td><a href="/company/{{ project.company }}">{{ project.company }}</a></td>
+            <td style="vertical-align:middle; text-align:center;">{{ project.region }}</td>
+            <td style="vertical-align:middle; text-align:center;">{{ project.approved_date.isoformat }}</td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+              <td colspan="5" style="vertical-align:middle; text-align:center;" class="text-error">没有满足条件的数据.</th>
+          </tr>
+        {% endif %}
+        </tbody>
+      </table>
+    </div>
+      
+      {% paginate %}
+
+    {% endif %}
+
+  {% include 'inc_html/footer_inc.html' %}
+
+  </body>
+</html>

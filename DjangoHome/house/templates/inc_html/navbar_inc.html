@@ -1,0 +1,57 @@
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">{{ site_name }}</a>
+            <div class="nav-collapse">
+              <ul class="nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-home"></i> 楼盘<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'project_index' %}"><i class="icon-th-list"></i> 全部楼盘</a></li>
+                    <li><a href="{% url 'project_search' %}"><i class="icon-search"></i> 搜索楼盘</a></li>
+                  </ul>
+                </li>
+
+                <li class="divider-vertical"></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-list-alt"></i> 开发商<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'company_index' %}"><i class="icon-th-list"></i> 全部开发商</a></li>
+                    <li><a href="{% url 'company_search' %}"><i class="icon-search"></i> 搜索开发商</a></li>
+                  </ul>
+                </li>
+
+                <li class="divider-vertical"></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-star"></i> 数据统计<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'datastat_trend_live' %}"><i class="icon-screenshot"></i> 新房供应趋势</a></li>
+                    <li><a href="{% url 'datastat_companystat' %}"><i class="icon-arrow-up"></i> 开发商统计</a></li>
+                  </ul>
+                </li>
+                <!--
+                <li class="divider-vertical"></li>
+                <li><a href="/subscribe"><i class="icon-leaf"></i> 订阅新房通知</a></li>
+                <li class="divider-vertical"></li>
+                -->
+              </ul>
+
+              <ul class="nav pull-right">
+                <!--
+                <li><span class="navbar-text"><i class="icon-user"></i>cheyo</span></li>
+                <li class="divider-vertical"></li>
+                -->
+                <li><span class="navbar-text">数据更新日期:&nbsp; </span></li>
+                <li><span class="navbar-text">{{ system_status.last_update|date:"Y-m-d" }}</span></li>
+              </ul>
+            </div><!-- /.nav-collapse -->
+          </div>
+        </div><!-- /navbar-inner -->
+    </div><!-- /navbar -->

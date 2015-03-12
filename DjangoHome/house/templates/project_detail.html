@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>{{ site_name }}</title>
+
+    {% include 'inc_html/header_inc.html' %}
+  </head>
+
+  <body>
+
+    {% include 'inc_html/navbar_inc.html' %}
+
+    <div class="container">
+        <ul class="breadcrumb" style="margin: 0 0 0px;">
+          <li><a href="/">首页</a> <span class="divider">/</span></li>
+          <li><a href="/house">楼盘</a> <span class="divider">/</span></li>
+          <li class="active">{{ project.name }}</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <span style="vertical-align:middle; text-align:center;"><H3>{{ project.name }}</H3><span></p>
+      {% for summary in project_summary_list %}
+        <table class="table table-bordered table-striped table-condensed">
+          <thead>
+              <tr bgcolor="#0055CC" style="color:white">
+                <th style="vertical-align:middle; text-align:center;">类型:</th>
+                <th style="vertical-align:middle; text-align:center;">{{ summary.type }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>类型: </td>
+                <td>{{ summary.type }}</td>
+              </tr>
+              <tr>
+                <td>面积: </td>
+                <td>{{ summary.min_size }} ~ {{ summary.max_size }}平方米</td>
+              </tr>
+              <tr>
+                <td>单价: </td>
+                <td>{{ summary.min_price }} ~ {{ summary.max_price }}元/平方米<P/>
+                    均价: {{ summary.avg_price }}元/平方米
+                    基于: [{{ summary.sample_count }}/{{ summary.total_count }}] 评估
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        <P/>
+      {% endfor %}
+     </div>
+    
+    <div class="container" style="vertical-align:middle; text-align:center;">
+      {% for building_name in building_list %}
+          <div class="span3" style="margin: 0px 6px 12px 8px;">
+            <a class="btn btn-primary btn-block btn-large" href="/house/{{ project.id }}/{{ building_name | urlencode }}">{{ building_name }}</a>
+          </div>
+      {% endfor %}
+    </div>
+
+    {% include 'inc_html/footer_inc.html' %}
+  </body>
+</html>

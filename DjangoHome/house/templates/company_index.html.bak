@@ -1,0 +1,64 @@
+{% load pagination_tags %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>柠檬House</title>
+
+    {% include 'header_inc.html' %}
+
+  </head>
+
+  <body>
+
+    {% include 'navbar_inc.html' %}
+
+    <div class="container">
+        <ul class="breadcrumb">
+          <li><a href="/">首页</a> <span class="divider">/</span></li>
+          <li class="active">开发商</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        
+      <div class="container" style="vertical-align:middle; text-align:center;">
+        <form class="form-search" action="/company/search/" method="post">
+          <div class="input-append">
+            {% csrf_token %}
+            {{ form.keyword }}
+            <button type="submit" class="btn btn-info"> 搜索 </button>
+          </div>
+        </form>
+        {% for error in form.keyword.errors %}
+            <li class="text-error"><strong>{{ error|escape }}</strong></li>
+        {% endfor %}
+      <div class="container">
+
+        <table class="table table-bordered table-striped table-condensed">
+          <thead>
+              <tr bgcolor="#0055CC" style="color:white">
+                <th style="vertical-align:middle; text-align:center;">序号</th>
+                <th style="vertical-align:middle; text-align:center;">开发企业</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% autopaginate company_list 30 %}
+            {% if company_list %}
+              {% for company in company_list %}
+              <tr>
+                <td>{{ page_obj.start_index | add:forloop.counter | add:"-1" }}</td>
+                <td><a href="/company/{{ company | urlencode }}">{{ company }}</a></td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                 <td>no data</td> 
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+     </div>
+        {% paginate %}
+  </body>
+</html>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chart caption='过去一年每月新增商品房总套数-住宅' yaxisname='每月新增商品房套数-住宅' useroundedges='1' bgcolor='FFFFFF,FFFFFF' showBorder='0'>
+{% if trend_data %}
+  {% for trend_stat in trend_data %}
+    <set label='{{ trend_stat.month }}' value='{{ trend_stat.house_count }}' />
+  {% endfor %}
+{% endif %}
+</chart>
+  
+  
