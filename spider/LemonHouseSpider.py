@@ -89,7 +89,7 @@ class Project():
         cursor.execute("SELECT id FROM house_project WHERE id=" + str(self.id))
         data = cursor.fetchone()
         cnt = int(cursor.rowcount)
-        cursor.close()
+        #cursor.close()
         if 0 == cnt:
             return True
         else:
@@ -198,7 +198,7 @@ class Project():
             curr_branch = Branch(row[0], row[1], row[2], self.id)
             branch_list.append(curr_branch)
 
-        cursor.close()
+        #cursor.close()
 
         return branch_list
         
@@ -261,7 +261,7 @@ class Branch():
                         """, (self.md5, str(self.id)))
         if 0 == int(cursor.rowcount):
             logging.error("update branch md5 error in database. branch id:%d" % (self.id))
-        cursor.close()
+        #cursor.close()
 
     def save_branch(self):
         logging.debug(self)
@@ -349,7 +349,7 @@ class House():
                       (self.id, self.name, self.floor, \
                        self.size1, self.size2, self.size3, \
                        self.price, self.type, self.status, self.branch_id,))
-        cursor.close()
+        #cursor.close()
 
     def __str__(self):
         return u"[House:%d|%s|%s|%s|%s|%s|%s|%s|%d|%d]" % (self.id, self.name, self.floor, \
@@ -373,6 +373,8 @@ class House():
             status = 6
         elif img_filename == "imc/bz1.gif":
             status = 7
+        elif img_filename == "imc/b1_3.gif":
+            status = 8
         else:
             logging.error("invalid status:%s" % img_filename)
 
@@ -393,7 +395,7 @@ class House():
             if 0 != iCurrCnt:
                 logging.debug("update house(id:%d) status to (%d)" % (house_id, status))
             iCnt = iCnt + iCurrCnt
-        cursor.close()
+        #cursor.close()
 
         return iCnt
 
@@ -500,7 +502,7 @@ def analyse_project_summary(project_id):
         project_summary.project_id = project_id
         dict_project_summary[row[0]] = project_summary
 
-    cursor.close()
+    #cursor.close()
         
     sql = """SELECT type,MIN(price),MAX(price),ROUND(AVG(price)),COUNT(1)
              FROM house_house
@@ -517,7 +519,7 @@ def analyse_project_summary(project_id):
         project_summary.avg_price = row[3]
         project_summary.sample_count = row[4]
     
-    cursor.close()
+    #cursor.close()
     save_project_summary(dict_project_summary)
 
 def analyse_branch_summary(project_id):
@@ -541,13 +543,13 @@ def analyse_branch_summary(project_id):
             branch_summary.branch_id = branch_id
             dict_branch_summary[row[0]] = branch_summary
             
-        cursor.close()
+        #cursor.close()
 
         sql = """SELECT type,MIN(price),MAX(price),ROUND(AVG(price)),COUNT(1)
                  FROM house_house
                  WHERE branch_id = '%d' AND price IS NOT NULL 
                  GROUP BY type""" % (branch_id)
-        cursor.execute(sql)
+        #cursor.execute(sql)
         # 获取所有记录列表
         results = cursor.fetchall()
         for row in results:
@@ -580,7 +582,7 @@ def save_project_summary(dict_project_summary):
                    project_summary.sample_count, project_summary.total_count, \
                    project_summary.project_id,))
 
-        cursor.close()
+        #cursor.close()
         logging.info("[project_summary]:%s" % project_summary)
 
 def save_branch_summary(dict_branch_summary):
@@ -616,7 +618,7 @@ def get_branch_id_list(project_id):
     for row in results:
         branch_id = row[0]
         branch_id_list.append(branch_id)
-    cursor.close()
+    #cursor.close()
     return branch_id_list
 
 def update_system_status():
@@ -665,11 +667,13 @@ def loop_run():
                     if is_reach_history_project:
                         break
             # 含AttributeError，KeyError， UnicodeEncodeError
-            except AttributeError:
+            except AttributeError, e:
                 conn.rollback()
+                logging.error(e)
                 logging.error("process project(%s) fail. Attribute Error" % currProject.name)
-            except KeyError:
+            except KeyError, e:
                 conn.rollback()
+                logging.error(e)
                 logging.error("process project(%s) fail. Key Error" % currProject.name)
             except Exception, e:
                 conn.rollback()
@@ -679,6 +683,7 @@ def loop_run():
             else:
                 # 每成功处理一个Project,提交一次数据库
                 conn.commit()
+                logging.debug("submit transaction for project(%s) successfully" % currProject.name)
             finally:
                 pass
 

@@ -61,6 +61,7 @@ class House(models.Model):
         (5, '初始登记'),
         (6, '管理局锁定'),
         (7, '自动锁定'),
+        (8, '安居房'),
         (999, '未知'),
     )
     status = models.IntegerField(choices=STATUS)
