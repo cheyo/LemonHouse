@@ -35,7 +35,7 @@ def project_search(request):
         is_show_result = True
         if form.is_valid(): # All validation rules pass
             keyword = form.cleaned_data['keyword']
-            project_list = Project.objects.filter(company__contains=keyword)
+            project_list = Project.objects.filter(name__contains=keyword)
             #project_list = set(project_list)  # set用于取唯一,解决上行代码distinct()无法生效问题
             logger.info("search project")
 
