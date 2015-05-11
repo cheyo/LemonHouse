@@ -118,7 +118,7 @@ def company_search(request):
             keyword = form.cleaned_data['keyword']
             company_list = Project.objects.filter(company__contains=keyword)\
                 .values_list('company', flat=True).distinct()
-            #company_list = set(company_list)  # set用于取唯一,解决上行代码distinct()无法生效问题
+            company_list = list(set(company_list))  # set用于取唯一,解决上行代码distinct()无法生效问题
             logger.info("search company")
     logger.info("search company 1")
 
